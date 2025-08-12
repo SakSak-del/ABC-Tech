@@ -429,9 +429,8 @@ if show_eda:
                    y = 1.05, 
                    fontsize = 18)
     st.pyplot(plt.gcf())
-      plt.close()
-      
-      return
+    plt.close()
+    return
 
 from statsmodels.tsa.seasonal import seasonal_decompose
 decomposition = seasonal_decompose(ts2['ts_trans'], freq = 365)
@@ -470,9 +469,8 @@ if show_eda:
       
       plt.tight_layout()
     st.pyplot(plt.gcf())
-      plt.close()
-      
-      return
+    plt.close()
+    return
 
 st.markdown(''' Finding the auto correlation and partial auto-correlation''')
 
@@ -501,9 +499,8 @@ if show_eda:
       plt.title('For ARIMA model (%i, %i, %i) for ts %s, RSS: %.4f, RMSE: %.4f' %(p, d, q, ts, rss, rmse))
       
     st.pyplot(plt.gcf())
-      plt.close()
-      
-      return results_
+    plt.close()
+    return results_
 
 model_AR = run_arima_model(ts2, 
                            ts = 'ts_trans', 
