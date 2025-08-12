@@ -4,51 +4,60 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Set page config
-st.set_page_config(page_title="Bike Sharing Analysis", layout="wide")
+st.set_page_config(page_title="ABC Tech Incident Management", layout="wide")
 
-# Load the dataset
+# Load the dataset from CSV
 @st.cache_data
 def load_data():
-    day_data = pd.read_csv("day.csv")
-    hour_data = pd.read_csv("hour.csv")
-    return day_data, hour_data
+    return pd.read_csv("dataset_list.csv")
 
-day_data, hour_data = load_data()
+data = load_data()
 
 # Sidebar navigation
 st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Dataset Overview", "Visualizations", "Correlation Heatmap"])
+page = st.sidebar.radio("Go to", ["Dataset Overview", "EDA", "Correlation Heatmap"])
 
 # Dataset Overview
 if page == "Dataset Overview":
     st.title("Dataset Overview")
-    st.subheader("Day Data")
-    st.dataframe(day_data.head())
-    st.subheader("Hour Data")
-    st.dataframe(hour_data.head())
+    st.write("First 10 rows of the ABC Tech dataset")
+    st.dataframe(data.head(10))
+    st.write("Shape of dataset:", data.shape)
+    st.write("Data types:", data.dtypes)
 
-# Visualizations
-elif page == "Visualizations":
-    st.title("Visualizations")
-    
+# EDA
+elif page == "EDA":
+    st.title("Exploratory Data Analysis")
+
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader("Daily Rentals Distribution")
+        st.subheader("Priority Distribution")
         fig, ax = plt.subplots()
-        sns.histplot(day_data['cnt'], bins=30, kde=True, ax=ax)
+        sns.countplot(data=data, x='Priority', palette="viridis", ax=ax)
         st.pyplot(fig)
 
     with col2:
-        st.subheader("Hourly Rentals Distribution")
+        st.subheader("Impact Distribution")
         fig, ax = plt.subplots()
-        sns.histplot(hour_data['cnt'], bins=30, kde=True, ax=ax)
+        sns.countplot(data=data, x='Impact', palette="magma", ax=ax)
         st.pyplot(fig)
+
+    st.subheader("Urgency Distribution")
+    fig, ax = plt.subplots()
+    sns.countplot(data=data, x='Urgency', palette="coolwarm", ax=ax)
+    st.pyplot(fig)
 
 # Correlation Heatmap
 elif page == "Correlation Heatmap":
     st.title("Correlation Heatmap")
-    st.write("Correlation of numerical features with rental counts")
+    st.write("Correlation of numerical features in the dataset")
 
-    fig, ax = plt.subplots(figsize=(10, 6))
-    sns.heatmap(day_data.corr(), annot=True, cmap="coolwarm", ax=ax)
+    # Convert categorical to numeric temporarily for correlation
+    df_numeric = data.copy()
+    for col in df_numeric.columns:
+        if df_numeric[col].dtype == 'object':
+            df_numeric[col] = pd.factorize(df_numeric[col])[0]
+
+    fig, ax = plt.subplots(figsize=(12, 8))
+    sns.heatmap(df_numeric.corr(), annot=True, cmap="coolwarm", ax=ax)
     st.pyplot(fig)
