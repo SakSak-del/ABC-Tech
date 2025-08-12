@@ -384,8 +384,7 @@ if show_eda:
       plt.legend([ts, ts_transform])
     st.pyplot(plt.gcf())
     plt.close()
-      
-      return
+    return
 
 ts2['ts_trans'] = ts2.date.apply(lambda x: np.log(x)) - ts2.date.diff()
 
