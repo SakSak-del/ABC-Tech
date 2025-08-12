@@ -383,7 +383,7 @@ if show_eda:
       plt.tick_params(axis = 'x', rotation = 45)
       plt.legend([ts, ts_transform])
     st.pyplot(plt.gcf())
-          plt.close()
+    plt.close()
       
       return
 
